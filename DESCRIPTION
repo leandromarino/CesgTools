@@ -1,0 +1,24 @@
+Package: CesgTools
+Type: Package
+Title: Educational Assessment Toolkit (Cesgranrio Foundation)
+Version: 2.1.2
+Date: 2018-10-17
+Author: Leandro Marino <leandromarino@leandromarino.com.br>, Tiago Fragoso
+    <tiago@cesgranrio.org.br>, Ruben Klein <kleinrub@gmail.com>
+Maintainer: Leandro Marino <leandromarino@leandromarino.com.br>, Tiago Fragoso
+    <tiago@cesgranrio.org.br>
+Description: Um conjunto de rotinas para lidar com dados provenientes de
+    avaliacoes educacionais. Desde a compilacao de estatisticas classicas
+    ateh a exportacao dos resultados. Aos poucos funcoes para leituras
+    de dados provenientes do Bilog e outros softwares serao adicionadas.
+License: GPL (>= 2)
+LazyData: true
+Imports:
+    Rcpp (>= 0.12.3),
+    Hmisc,
+    flextable,
+    officer,
+    gdtools,
+    xlsx
+LinkingTo: Rcpp
+RoxygenNote: 6.1.1

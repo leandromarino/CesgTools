@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // Escore
 DataFrame Escore(DataFrame respostas, DataFrame gabarito, int NumCad, int NumItens, std::string CodAcer, std::string CodErro, std::string CodNaoAp, int nblform, int tbl);
 RcppExport SEXP _CesgTools_Escore(SEXP respostasSEXP, SEXP gabaritoSEXP, SEXP NumCadSEXP, SEXP NumItensSEXP, SEXP CodAcerSEXP, SEXP CodErroSEXP, SEXP CodNaoApSEXP, SEXP nblformSEXP, SEXP tblSEXP) {

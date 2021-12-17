@@ -23,9 +23,9 @@ read.ph1_stats <- function(file){
   nome_lista <- ph1[ini]
   nome_lista <- gsub('ITEM STATISTICS FOR MULTIPLE GROUPS','', nome_lista)
   nome_lista <- gsub('ITEM STATISTICS FOR GROUP:','',nome_lista)
-  nome_lista <- trim(nome_lista)
-  nome_lista <- trim(nome_lista)
-  nome_lista <- trim(gsub(pattern = "^\\d{1,2}(.*)$", replacement = '\\1', nome_lista))
+  nome_lista <- stringr::str_trim(nome_lista)
+  nome_lista <- stringr::str_trim(nome_lista)
+  nome_lista <- stringr::str_trim(gsub(pattern = "^\\d{1,2}(.*)$", replacement = '\\1', nome_lista))
   nome_lista
   
   names(ph1.stats) <- nome_lista

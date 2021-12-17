@@ -1,0 +1,378 @@
+# 
+# gabpar = gabparEnemEN19P2_PT19DLC_v1
+# ctt = cbind(cttCalibEnemPT19DLC[[1]],
+#             BL = as.character(gabparEnemEN19P2_PT19DLC_v1$bl),
+#             OB = as.character(gabparEnemEN19P2_PT19DLC_v1$ob),
+#             coditem = gabparEnemEN19P2_PT19DLC_v1$coditem)
+# difph1 = difph1EnemPT19D_LC_v1
+# difResumo = difResumoEnemPT19D_LC_v1
+# qualiaju = qualiAjuEnemPT19D_LC_v1
+# titulo = 'Pré-Teste 2019 Digital - Linguagens e Códigos'
+# sufixo = 'PT19D_LC_v1'
+# numalt = 5
+# dirgraf = paste0(dirENEM19_resul,'GraficosItens/PT19D_LC_v1/')
+# dirsaida = paste0(dirENEM19_resul,'ResumoCalib/')
+# bloco = TRUE
+
+
+
+write.word.resumoCalibAju <- function(
+  gabpar, ctt, difph1, difResumo, qualiaju, titulo, sufixo, 
+  numalt, dirgraf, dirsaida,
+  cores = c("#E6E6E6", "#CCCCCC", "#B3B3B3", "#999999", "#4C4C4C", "#333333", "#191919"),
+  debug = FALSE, min_dif = 0.15, min_aju = 0.15, itens = NULL, bloco = FALSE)
+{
+  if(debug) browser()
+  
+  
+  
+  
+  
+  grafs <- dir(dirgraf)
+  
+  pega_ultimo_elemento <- function(x){
+    result <- x[nrow(x),] %>% unlist %>% unique
+    if(length(result) > 1){
+      stop('Existem dois símbolos em sequência!')
+    }
+    
+    result
+  }
+  
+  ini <- stringr::str_locate_all(string = grafs, pattern =  "_")   %>% lapply(., pega_ultimo_elemento) %>% unlist() + 1
+  fim <- stringr::str_locate_all(string = grafs, pattern =  "\\.") %>% lapply(., pega_ultimo_elemento) %>% unlist() - 1
+  
+  grafs_coditem <- substring(grafs, ini, fim)
+  
+  rm(ini, fim)
+  
+  if(bloco == FALSE){
+    
+    
+    
+    output <- officer::read_docx(path = paste0(dirsaida, 'Resumo_Template.docx')) 
+    officer::styles_info(output)
+    output <- officer::body_add_par(x = output, 
+                                    value = titulo, 
+                                    style = "heading 1",
+                                    pos = 'on')
+    
+    output <- officer::body_add_par(x = output, value = '', style = "Normal")
+    output <- officer::body_add_par(x = output, value = '', style = "Normal")
+    
+    output <- officer::body_add_par(x = output, value = "Arquivo gerado em:", style = "Normal")
+    output <- officer::body_add_par(x = output, value = Sys.time(), style = "Normal")
+    
+    output <- officer::body_add_par(x = output, value = '', style = "Normal")
+    
+    output <- officer::body_add_break(output)
+    
+    if(is.null(itens)) itens <- 1:nrow(gabpar)
+    
+    for(itematual in itens){
+      
+      cat(paste0('Exportando Item : ', sprintf("%02d", itematual), ' de ', sprintf('%02d', nrow(gabpar)), '\r'))
+      
+      (.aux_ctt <- ctt[itematual, ])
+      (.aux_gabpar <- gabpar[itematual, ])
+      (.aux_grafs <- grafs[grafs_coditem == .aux_gabpar$coditem])
+      
+      (.aux_grafcci <- .aux_grafs[substr(.aux_grafs,1,3) == "CCI"])
+      (.aux_grafcomuns <- .aux_grafs[substr(.aux_grafs,1,3) == "Com"])
+      
+      (.aux_difph1 <- difph1[difph1$coditem == .aux_gabpar$coditem,])
+      (.aux_difResumo <- difResumo[difResumo$coditem == .aux_gabpar$coditem,])
+      
+      (.aux_qualiaju <- qualiaju[itematual,])
+      
+      .verificaItem <- FALSE
+      
+      if(nrow(.aux_difResumo) > 0){
+        (.verificaItem <- sum(.aux_difResumo[, c('Mod_x_G1', 'Mod_x_G2', 'G1_x_G2')] > min_dif) > 0)
+      }
+      
+      if(nrow(.aux_qualiaju) > 0){
+        (.verificaItem <- sum(.aux_qualiaju[, 'AjuMax'] > min_aju) > 0)
+      }
+      
+      
+      # inicio do item
+      output <- officer::body_add_par(x = output, 
+                                      value = paste0("Item: ", sprintf('%02d', itematual),
+                                                     " de ", nrow(gabpar),
+                                                     " | Código: ", .aux_gabpar$coditem,
+                                                     ifelse(.verificaItem, ' (ITEM COM POTENCIAL PROBLEMA)', '')), 
+                                      style = "heading 2")
+      
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      
+      ### adicionar tirinha da estatística classica
+      output <- flextable::body_add_flextable(x = output,
+                                              value = ft_ctt(ctt = .aux_ctt, numalt = numalt, cores = cores), 
+                                              align = 'center')
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      
+      ### curva caracteristica do item 
+      output <- officer::body_add_img(x = output, 
+                                      src = paste0(dirgraf, .aux_grafcci), 
+                                      width = 16.36 / 2.54,
+                                      height = 8.18 / 2.54)
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      
+      if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 0){
+        
+        ## qualidade do ajuste
+        output <- officer::body_add_par(x = output,
+                                        value = 'Qualidade do Ajuste', 
+                                        style = "Normal")
+        
+        output <- flextable::body_add_flextable(x = output,
+                                                value = ft_quali_ajuste(qualiaju = .aux_qualiaju, cores = cores), 
+                                                align = 'center')
+        
+        ### dif tct
+        output <- officer::body_add_par(x = output,
+                                        value = 'DIF - Teoria Clássica de Testes', 
+                                        style = "Normal")
+        
+        output <- flextable::body_add_flextable(x = output,
+                                                value = ft_dif_ph1(dif_ph1 = .aux_difph1, cores = cores), 
+                                                align = 'center')
+        output <- officer::body_add_par(x = output, value = '', style = "Normal")
+        
+        ### dif tri
+        output <- officer::body_add_par(x = output, value = 'DIF - TRI', style = "Normal")
+        
+        output <- flextable::body_add_flextable(x = output,
+                                                value = ft_dif_resumo(dif_resumo = .aux_difResumo, cores = cores), 
+                                                align = 'center')
+        output <- officer::body_add_par(x = output, value = '', style = "Normal")
+        
+        
+        for(i in 1:length(.aux_grafcomuns)){
+          aux <- unlist(strsplit(x = .aux_grafcomuns[i], "_"))
+          if(i == 1){
+            output <- officer::body_add_img(x = output, 
+                                            src = paste0(dirgraf, .aux_grafcomuns[i]), 
+                                            width =  7.0 / 2.54,
+                                            height = 7.0 / 2.54, 
+                                            style = "centered")
+          }else{
+            output <- officer::slip_in_img(x = output, 
+                                           src = paste0(dirgraf, .aux_grafcomuns[i]), 
+                                           width =  7.0 / 2.54,
+                                           height = 7.0 / 2.54, 
+                                           pos = 'after')
+          }
+        }
+      }else{
+        output <- officer::body_add_par(x = output,
+                                        value = 'Qualidade do Ajuste', 
+                                        style = "Normal")
+        
+        output <- flextable::body_add_flextable(x = output,
+                                                value = ft_quali_ajuste(qualiaju = .aux_qualiaju, cores = cores), 
+                                                align = 'center')
+        
+      }
+      
+      if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 1){
+        output <- officer::body_add_par(x = output, 
+                                        value = paste0('Item comum que foi abandonado no grupo 2: ', 
+                                                       .aux_difResumo$tipodif_G1_x_G2), 
+                                        style = "Normal")
+      }
+      
+      output <- officer::body_add_break(output)
+      
+    }
+    
+    ### adicionar graficos de itens comuns
+    ### adicionar tabela de dif pct
+    ### adicionar tabela de dif tri
+    
+    
+    print(output, target = paste0(dirsaida, 'ResumoCalib_',sufixo,'.docx')) 
+    
+  }
+  
+  if(bloco == TRUE){
+    
+    blocos <- unique(gabpar$bl)
+    
+    for(bl in blocos){
+      
+      .aux_gabpar_bl <- gabpar[gabpar$bl == bl, ]
+      
+      output <- officer::read_docx(path = paste0(dirsaida, 'Resumo_Template.docx')) 
+      
+      officer::styles_info(output)
+      
+      output <- officer::body_add_par(x = output, 
+                                      value = paste0(titulo, ' - Bloco ', bl), 
+                                      style = "heading 1",
+                                      pos = 'on')
+      
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      
+      output <- officer::body_add_par(x = output, value = "Arquivo gerado em:", style = "Normal")
+      output <- officer::body_add_par(x = output, value = Sys.time(), style = "Normal")
+      
+      output <- officer::body_add_par(x = output, value = '', style = "Normal")
+      
+      output <- officer::body_add_break(output)
+      
+
+      for(ob in .aux_gabpar_bl$ob){
+        
+        itematual <- .aux_gabpar_bl[.aux_gabpar_bl$ob == ob, 'it']
+        
+        cat(paste0('Exportando Bloco : ', bl,' Item : ', sprintf("%02d", itematual), ' de ', sprintf('%02d', nrow(gabpar)), '\r'))
+        
+        (.aux_ctt <- ctt[itematual, ])
+        (.aux_gabpar <- gabpar[itematual, ])
+        (.aux_grafs <- grafs[grafs_coditem == .aux_gabpar$coditem])
+        
+        (.aux_grafcci <- .aux_grafs[substr(.aux_grafs,1,3) == "CCI"])
+        (.aux_grafcomuns <- .aux_grafs[substr(.aux_grafs,1,3) == "Com"])
+        
+        (.aux_difph1 <- difph1[difph1$coditem == .aux_gabpar$coditem,])
+        (.aux_difResumo <- difResumo[difResumo$coditem == .aux_gabpar$coditem,])
+        
+        (.aux_qualiaju <- qualiaju[itematual,])
+        
+        .verificaItem <- FALSE
+        
+        if(nrow(.aux_difResumo) > 0){
+          (.verificaItem <- sum(.aux_difResumo[, c('Mod_x_G1', 'Mod_x_G2', 'G1_x_G2')] > min_dif) > 0)
+        }
+        
+        if(nrow(.aux_qualiaju) > 0){
+          (.verificaItem <- sum(.aux_qualiaju[, 'AjuMax'] > min_aju) > 0)
+        }
+        
+        
+        # inicio do item
+        output <- officer::body_add_par(x = output, 
+                                        value = paste0("Item: ", sprintf('%02d', itematual),
+                                                       " de ", nrow(gabpar),
+                                                       " | Código: ", .aux_gabpar$coditem,
+                                                       ifelse(.verificaItem, ' (ITEM COM POTENCIAL PROBLEMA)', '')), 
+                                        style = "heading 2")
+        
+        output <- officer::body_add_par(x = output, value = '', style = "Normal")
+        
+        ### adicionar tirinha da estatística classica
+        output <- flextable::body_add_flextable(x = output,
+                                                value = ft_ctt(ctt = .aux_ctt, numalt = numalt, cores = cores), 
+                                                align = 'center')
+        output <- officer::body_add_par(x = output, value = '', style = "Normal")
+        
+        ### curva caracteristica do item 
+        output <- officer::body_add_img(x = output, 
+                                        src = paste0(dirgraf, .aux_grafcci), 
+                                        width = 16.36 / 2.54,
+                                        height = 8.18 / 2.54)
+        output <- officer::body_add_par(x = output, value = '', style = "Normal")
+        
+        if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 0){
+          
+          ## qualidade do ajuste
+          output <- officer::body_add_par(x = output,
+                                          value = 'Qualidade do Ajuste', 
+                                          style = "Normal")
+          
+          output <- flextable::body_add_flextable(x = output,
+                                                  value = ft_quali_ajuste(qualiaju = .aux_qualiaju, cores = cores), 
+                                                  align = 'center')
+          
+          ### dif tct
+          output <- officer::body_add_par(x = output,
+                                          value = 'DIF - Teoria Clássica de Testes', 
+                                          style = "Normal")
+          
+          output <- flextable::body_add_flextable(x = output,
+                                                  value = ft_dif_ph1(dif_ph1 = .aux_difph1, cores = cores), 
+                                                  align = 'center')
+          output <- officer::body_add_par(x = output, value = '', style = "Normal")
+          
+          ### dif tri
+          output <- officer::body_add_par(x = output, value = 'DIF - TRI', style = "Normal")
+          
+          output <- flextable::body_add_flextable(x = output,
+                                                  value = ft_dif_resumo(dif_resumo = .aux_difResumo, cores = cores), 
+                                                  align = 'center')
+          output <- officer::body_add_par(x = output, value = '', style = "Normal")
+          
+          
+          for(i in 1:length(.aux_grafcomuns)){
+            aux <- unlist(strsplit(x = .aux_grafcomuns[i], "_"))
+            if(i == 1){
+              output <- officer::body_add_img(x = output, 
+                                              src = paste0(dirgraf, .aux_grafcomuns[i]), 
+                                              width =  7.0 / 2.54,
+                                              height = 7.0 / 2.54, 
+                                              style = "centered")
+            }else{
+              output <- officer::slip_in_img(x = output, 
+                                             src = paste0(dirgraf, .aux_grafcomuns[i]), 
+                                             width =  7.0 / 2.54,
+                                             height = 7.0 / 2.54, 
+                                             pos = 'after')
+            }
+          }
+        }else{
+          output <- officer::body_add_par(x = output,
+                                          value = 'Qualidade do Ajuste', 
+                                          style = "Normal")
+          
+          output <- flextable::body_add_flextable(x = output,
+                                                  value = ft_quali_ajuste(qualiaju = .aux_qualiaju, cores = cores), 
+                                                  align = 'center')
+          
+        }
+        
+        if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 1){
+          output <- officer::body_add_par(x = output, 
+                                          value = paste0('Item comum que foi abandonado no grupo 2: ', 
+                                                         .aux_difResumo$tipodif_G1_x_G2), 
+                                          style = "Normal")
+        }
+        
+        output <- officer::body_add_break(output)
+        
+      }
+      
+      ### adicionar graficos de itens comuns
+      ### adicionar tabela de dif pct
+      ### adicionar tabela de dif tri
+      
+      
+      print(output, target = paste0(dirsaida,
+                                    'ResumoCalib',
+                                    "_", sufixo,
+                                    '_Bl', sprintf('%02d', bl), 
+                                    '.docx')) 
+      
+      
+      
+    }
+  }
+  
+  
+}
+
+# write.word.resumoCalib(
+#   gabpar = gabparEncc18CH_EMv1,
+#   ctt = cbind(ctt_ENCCEJA_1811001_EM_CH_20180921_idprova201812[[1]], 
+#               BL = as.integer(1), OB = as.integer(1:30), 
+#               coditem = as.integer(gabparEncc18CH_EMv1$coditem)),
+#   difph1 = difph1Encc18CH_EMv1,
+#   difResumo = difResumoEncc18CH_EFv1, 
+#   titulo = 'ENCCEJA 2018 - Ciências Humanas - Ensino Médio - BR REG',
+#   sufixo = 'EM_CHv1',
+#   cores = paleta_encceja2018,
+#   numalt = 5,
+#   dirgraf = paste0(dirEncc18,'Resultados/GraficosItens/CH_EMv1/'),
+#   dirsaida = paste0(dirEncc18,'Resultados/GraficosItens/'))

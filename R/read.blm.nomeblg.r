@@ -16,7 +16,7 @@ read.blm.nomeblg <- function(file){
   nomeblg <- lapply(strsplit(nomeblg,'INAMES[=][(]|[)];'), '[', i = 2)
   nomeblg <- gsub("\n",',',nomeblg)
   nomeblg <- strsplit(nomeblg,',')
-  nomeblg <- as.list(trim(unlist(nomeblg)))
+  nomeblg <- as.list(stringr::str_trim(unlist(nomeblg)))
   
   indices_fortran <- grep(pattern = '.*[(].*',nomeblg) #Elementos do vetor
   

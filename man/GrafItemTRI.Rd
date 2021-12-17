@@ -4,9 +4,31 @@
 \alias{GrafItemTRI}
 \title{Sum of vector elements.}
 \usage{
-GrafItemTRI(rj, PercEmp, limx, dirgraf, gab, it, bl, ob, itblg, nomeblg,
-  codigo, parm, percpr, item, mincategoria = 30, nomeprojeto, titulo,
-  s12, m12, aesc, besc, modo, back = "transparent")
+GrafItemTRI(
+  rj,
+  PercEmp,
+  limx,
+  dirgraf,
+  gab,
+  it,
+  bl,
+  ob,
+  itblg,
+  nomeblg,
+  codigo,
+  parm,
+  percpr,
+  item,
+  mincategoria = 30,
+  nomeprojeto,
+  titulo,
+  s12,
+  m12,
+  aesc,
+  besc,
+  modo,
+  back = "transparent"
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

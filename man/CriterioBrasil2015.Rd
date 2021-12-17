@@ -4,9 +4,25 @@
 \alias{CriterioBrasil2015}
 \title{Sum of vector elements.}
 \usage{
-CriterioBrasil2015(data, banheiroq, empregadaq, carroq, computadorq,
-  lavaloucaq, geladeiraq, freezerq, lavaroupaq, dvdq, microondasq, motoq,
-  secadoraroupaq, ensinomae, ensinopai, aguaq, pavimentoq)
+CriterioBrasil2015(
+  data,
+  banheiroq,
+  empregadaq,
+  carroq,
+  computadorq,
+  lavaloucaq,
+  geladeiraq,
+  freezerq,
+  lavaroupaq,
+  dvdq,
+  microondasq,
+  motoq,
+  secadoraroupaq,
+  ensinomae,
+  ensinopai,
+  aguaq,
+  pavimentoq
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

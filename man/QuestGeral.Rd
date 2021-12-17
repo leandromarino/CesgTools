@@ -4,9 +4,20 @@
 \alias{QuestGeral}
 \title{Percentual de respondentes e media de desempenho para um conjunto de questoes}
 \usage{
-QuestGeral(base, prefixprofi, disc, vectitulo, vecquest, vecncat, veccat,
-  quantil = c(0.25, 0.5, 0.75), pesopond = NULL, ndec = 2,
-  bra = " ", inv = "*")
+QuestGeral(
+  base,
+  prefixprofi,
+  disc,
+  vectitulo,
+  vecquest,
+  vecncat,
+  veccat,
+  quantil = c(0.25, 0.5, 0.75),
+  pesopond = NULL,
+  ndec = 2,
+  bra = " ",
+  inv = "*"
+)
 }
 \arguments{
 \item{base}{Conjunto de dados contendo o desempenho do estudante e as variaveis

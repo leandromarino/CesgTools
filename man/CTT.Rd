@@ -4,9 +4,27 @@
 \alias{CTT}
 \title{Calcula as Estatisticas Classicas}
 \usage{
-CTT(data, ids, vars, peso = FALSE, nitems, nforms, nitemform, nblform,
-  nbl, tbl, gab, resp_possible, items, ndec = 2, acer = "1",
-  erro = "0", napres = "9", mostra_napres = 0, calc_normit = FALSE)
+CTT(
+  data,
+  ids,
+  vars,
+  peso = FALSE,
+  nitems,
+  nforms,
+  nitemform,
+  nblform,
+  nbl,
+  tbl,
+  gab,
+  resp_possible,
+  items,
+  ndec = 2,
+  acer = "1",
+  erro = "0",
+  napres = "9",
+  mostra_napres = 0,
+  calc_normit = FALSE
+)
 }
 \arguments{
 \item{data}{conjunto de dados a ser utilizado nas analises}

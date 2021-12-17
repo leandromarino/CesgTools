@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalculaIdade.R
 \name{CalculaIdade}
 \alias{CalculaIdade}
-\title{Calculo da Idade}
+\title{Cálculo de Idade}
 \usage{
 CalculaIdade(dia,mes,ano,diaref,mesref,anoref)
 }
@@ -13,14 +13,14 @@ CalculaIdade(dia,mes,ano,diaref,mesref,anoref)
 
 \item{ano}{Vetor com os anos de nascimento das pessoas (formato: aaaa)}
 
-\item{diaref}{Dia de referencia (formato: dd)}
+\item{diaref}{Dia de referência (formato: dd)}
 
-\item{mesref}{Mes de referencia (formato: mm)}
+\item{mesref}{Mes de referência (formato: mm)}
 
-\item{anoref}{Ano de referencia (formato: aaaa)}
+\item{anoref}{Ano de referência (formato: aaaa)}
 }
 \description{
-Funcao para calcular a idade dos estudantes considerando uma data de deferencia
+Função para calcular a idade dos estudantes considerando uma data de referência.
 }
 \examples{
 

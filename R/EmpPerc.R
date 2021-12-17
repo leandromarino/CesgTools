@@ -42,6 +42,8 @@ EmpPerc <- function(items, responses,vecform,profi,resp_possible,nitems,nitemfor
   #as.matrix(table(vecform,cut(profi,cut_break,labels = exib_break,include.lowest = TRUE, right = FALSE)))
   
   ### criando matriz de respostas
+  cat("Criando matriz de respostas\n")
+  
   resp_matrix <- data.frame(do.call(rbind,strsplit(responses,NULL)),stringsAsFactors=F)
   for(i in 1:nitemform){
     resp_matrix[,i] <- factor(resp_matrix[,i],levels=resp_possible)
@@ -61,6 +63,7 @@ EmpPerc <- function(items, responses,vecform,profi,resp_possible,nitems,nitemfor
   EmpPerc[[1]] <- list()
   EmpPerc[[2]] <- list()
   for(i in 1:nitems){
+    cat(paste0('Computando percentuais empíricos para o item: ', i, ' de ', nitems, '\r'))
     (df_empperc <- data.frame(matrix(NA,ncol=2,nrow=nalu)))
     (df_empperc[,1] <- factor(df_empperc[,1],levels=exib_break))
     (df_empperc[,2] <- factor(df_empperc[,2],levels=resp_possible))
@@ -83,5 +86,3 @@ EmpPerc <- function(items, responses,vecform,profi,resp_possible,nitems,nitemfor
   }
   EmpPerc
 }
-
-

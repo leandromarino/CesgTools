@@ -32,3 +32,5 @@ escore_r <- function(respostas, gabarito,  NumCad, NumItens, CodAcer, CodErro, C
   
   result 
 }
+
+

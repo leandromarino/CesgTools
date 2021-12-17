@@ -4,7 +4,9 @@
 \name{enem09_conc_sc}
 \alias{enem09_conc_sc}
 \title{Prices of 50,000 round cut diamonds}
-\format{A data frame with 53940 rows and 10 variables}
+\format{
+A data frame with 53940 rows and 10 variables
+}
 \usage{
 data(enem09_conc_sc)
 }

@@ -7,3 +7,4 @@ AlteraNivel <- function(EmpPerc, itens, niveis){
   }
   EmpPerc
 }
+

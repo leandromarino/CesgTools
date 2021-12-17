@@ -1,7 +1,7 @@
-#' Calculo da Idade
+#' Cálculo de Idade
 #' 
 #' @description 
-#' Funcao para calcular a idade dos estudantes considerando uma data de deferencia
+#' Função para calcular a idade dos estudantes considerando uma data de referência.
 #' 
 #' @usage 
 #' CalculaIdade(dia,mes,ano,diaref,mesref,anoref)
@@ -9,9 +9,9 @@
 #' @param dia Vetor com os dias de nascimento das pessoas (formato: dd)
 #' @param mes Vetor com os meses de nascimento das pessoas (formato: mm)
 #' @param ano Vetor com os anos de nascimento das pessoas (formato: aaaa)
-#' @param diaref  Dia de referencia (formato: dd)
-#' @param mesref Mes de referencia (formato: mm)
-#' @param anoref Ano de referencia (formato: aaaa)
+#' @param diaref Dia de referência (formato: dd)
+#' @param mesref Mes de referência (formato: mm)
+#' @param anoref Ano de referência (formato: aaaa)
 #' 
 #' @examples 
 #' 

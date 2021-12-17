@@ -4,9 +4,24 @@
 \alias{GrafItemAlt}
 \title{Sum of vector elements.}
 \usage{
-GrafItemAlt(PercEmp, limx, nomeprojeto, dirgraf, gab, it, bl, ob, itblg,
-  nomeblg, codigo, percpr, titulo, item, mincategoria = 30,
-  back = "transparent")
+GrafItemAlt(
+  PercEmp,
+  limx,
+  nomeprojeto,
+  dirgraf,
+  gab,
+  it,
+  bl,
+  ob,
+  itblg,
+  nomeblg,
+  codigo,
+  percpr,
+  titulo,
+  item,
+  mincategoria = 30,
+  back = "transparent"
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

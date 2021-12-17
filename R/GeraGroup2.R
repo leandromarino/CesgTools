@@ -1,6 +1,6 @@
-
-GeraGroup2 <- function(ordemitens, grpini, grpnome)
+GeraGroup2 <- function(ordemitens, grpini, grpnome, debug = FALSE)
 {
+  if(debug) browser()
   # ordemitens <- gabparPT1602M[,c('seq','bl','ob','itemblg','aban')]
   # set.seed(1)
   # ordemitens$aban <- sample(0:1,78,replace = T, prob = c(.8,.2))
@@ -53,7 +53,7 @@ GeraGroup2 <- function(ordemitens, grpini, grpnome)
     L2[ordemitens$bl[cont],ordemitens$ob[cont]] <- gsub(",",' ',L2[ordemitens$bl[cont],ordemitens$ob[cont]])
   }
   
-  if(tbl*5 > 79){
+  if(tbl*5 > 79 & tbl <= 30){
     if(tbl%%2 == 0){
       L2 <- matrix(as.vector(t(L2)), nrow = nbl*2, ncol = tbl/2, byrow = T)
     }else{
@@ -68,10 +68,23 @@ GeraGroup2 <- function(ordemitens, grpini, grpnome)
     }
   }
   
+  if(tbl > 30 & nbl == 1){
+    L2 <- as.vector(L2)
+    if(tbl %% 15 > 0){
+      L2 <- matrix(data = c(L2, rep('', (15 - tbl %% 15))),
+                   nrow = ceiling(tbl / 15),
+                   ncol = 15, 
+                   byrow = T)
+    }else{
+      L2 <- matrix(data = L2,
+                   nrow = tbl / 15,
+                   ncol = 15, 
+                   byrow = T)
+    }
+  }
+  
+  
   write.table(L1,quote = F,row.names = F,col.names = F, sep='')
   write.table(L2,quote = F,row.names = F,col.names = F, sep='')
 }
-
-
-
 

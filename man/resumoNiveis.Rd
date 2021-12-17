@@ -4,11 +4,16 @@
 \alias{resumoNiveis}
 \title{Sum of vector elements.}
 \usage{
-resumoNiveis(dados, turmas, colniv, colsresu, ndec = 1,
-  nomesniv = paste("n", c("000", sprintf("\%03d", seq(75, 450, 25))),
-  "_", c(sprintf("\%03d", seq(75, 450, 25)), "Inf"), sep = ""),
-  nomesnivac = c("Tot", paste("M", sprintf("\%03d", seq(75, 450, 25)),
-  sep = "")))
+resumoNiveis(
+  dados,
+  turmas,
+  colniv,
+  colsresu,
+  ndec = 1,
+  nomesniv = paste("n", c("000", sprintf("\%03d", seq(75, 450, 25))), "_",
+    c(sprintf("\%03d", seq(75, 450, 25)), "Inf"), sep = ""),
+  nomesnivac = c("Tot", paste("M", sprintf("\%03d", seq(75, 450, 25)), sep = ""))
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

@@ -9,7 +9,7 @@ dif_ph1 <- function(file, compara_grupo, gabpar){
   
   grupo_de_comparacao <- ph1[[compara_grupo]]
   
-  grupo_de_comparacao <- merge(grupo_de_comparacao, gabpar[, c('nomeblg', 'codbni')], by = 'nomeblg', all.x = T)
+  grupo_de_comparacao <- merge(grupo_de_comparacao, gabpar[, c('nomeblg', 'coditem')], by = 'nomeblg', all.x = T)
   
   nome_grupo_compara <- names(ph1)[compara_grupo]
   
@@ -24,11 +24,11 @@ dif_ph1 <- function(file, compara_grupo, gabpar){
   for(grp in group_ref){
     x <- merge(x = ph1[[grp]], y = grupo_de_comparacao, by = c('itemblg', 'nomeblg'))
     if(nrow(x) > 0){
-      cols <- c('itemblg', 'nomeblg', 'codbni', 'pct', paste0('pct_',nome_grupo_compara), 'bise', paste0('bise_',nome_grupo_compara))
+      cols <- c('itemblg', 'nomeblg', 'coditem', 'pct', paste0('pct_',nome_grupo_compara), 'bise', paste0('bise_',nome_grupo_compara))
       x <- x[,cols]
       x$tipo_dif <- paste(names(ph1)[grp], 'x', names(ph1)[compara_grupo])
       x$pct_dif <- x$pct - x[,paste0('pct_',nome_grupo_compara)]
-      cols <- c('itemblg', 'nomeblg', 'codbni', 'tipo_dif', 'bise', paste0('bise_',nome_grupo_compara),
+      cols <- c('itemblg', 'nomeblg', 'coditem', 'tipo_dif', 'bise', paste0('bise_',nome_grupo_compara),
                 'pct', paste0('pct_',nome_grupo_compara), 'pct_dif')
       x <- x[,cols]
       colnames(x) <- c('itemblg','nomeblg','coditem','tipo_dif','bise_G1','bise_G2','pct_G1','pct_G2', 'dif_G1_x_G2')

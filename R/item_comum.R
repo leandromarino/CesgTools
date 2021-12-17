@@ -9,11 +9,11 @@
 item_comum <- function(exp_gp1, gabpar_gp1, nome_gp1, exp_gp2, gabpar_gp2, nome_gp2){
   itcom <- data.frame(nomeblg = intersect(rownames(exp_gp1), rownames(exp_gp2)),stringsAsFactors = FALSE)
   itcom <- itcom[itcom$nomeblg != 0, , drop = FALSE]
-  cols <- c('codbni','nomeblg','itemblg','it')
+  cols <- c('coditem','nomeblg','itemblg','it')
   itcom <- merge(itcom, gabpar_gp1[,cols], by = 'nomeblg', all.x = TRUE)[,cols]
   colnames(itcom)[4] <- nome_gp1
-  itcom[,nome_gp2] <- gabpar_gp2[as.character(itcom$codbni),'it']
-  itcom$gab        <- gabpar_gp2[as.character(itcom$codbni),'gab']
+  itcom[,nome_gp2] <- gabpar_gp2[as.character(itcom$coditem),'it']
+  itcom$gab        <- gabpar_gp2[as.character(itcom$coditem),'gab']
   itcom <- itcom[order(itcom[,nome_gp2]),]
   itcom  
 }

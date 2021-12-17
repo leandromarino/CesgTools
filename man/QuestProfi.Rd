@@ -4,8 +4,18 @@
 \alias{QuestProfi}
 \title{Percentual de respondentes e media de desempenho para uma questao}
 \usage{
-QuestProfi(base, disc, quest, ncat, prefixprofi, quantil = c(0.25, 0.5,
-  0.75), pesopond, ndec, branco = " ", invalido = "*")
+QuestProfi(
+  base,
+  disc,
+  quest,
+  ncat,
+  prefixprofi,
+  quantil = c(0.25, 0.5, 0.75),
+  pesopond,
+  ndec,
+  branco = " ",
+  invalido = "*"
+)
 }
 \arguments{
 \item{base}{Conjunto de dados contendo o desempenho do estudante e as variaveis

@@ -1,3 +1,101 @@
+#' Calcula as Estatisticas Classicas
+#'
+#' @description
+#'   Esta funcao calcula as Estatísticas Clássicas, score, score por bloco,
+#'   percentual de acertos para um conjunto de dados e indica itens que possam
+#'   ter algum tipo de problema como, por exemplo: gabarito incorreto, item
+#'   mal elaborado, problema de impressao, entre outros.
+#'
+#' @param data conjunto de dados a ser utilizado nas análises
+#' @param ids vetor com os nomes das colunas de \code{data} que serao utilizadas
+#'    como identificacao na saida dos scores.
+#' @param vars vetor com os nomes das colunas de \code{data} na ordem 
+#'    \code{c(caderno,respostas,peso (se houver))}.
+#' @param nitems Numero de itens total.
+#' @param nitemform Numero de itens em cada caderno.
+#' @param nforms Numero de cadernos diferentes.
+#' @param nblform Numero de blocos em que a prova estua organizada. Se eh uma prova
+#'   fixa, \code{nblform=1}.
+#' @param nbl numero de blocos totais.7
+#' @param tbl Tamanho do bloco, ou seja, numero de itens existentes no bloco.
+#'   Se eh uma prova fixa, \code{tbl=nitemform}.
+#' @param gab Vetor com a string de gabaritos, cada item eh um elemento deste
+#'   vetor.
+#' @param resp_possible Respostas possiveis (por exemplo:
+#'   \code{resp_possible = c(LETTERS[1:5],' ','*')}).
+#' @param items Objeto do tipo matriz com \code{rownames} e
+#'   \code{colnames} definido.
+#' @param ndec Numero de decimais para a saida das estatisticas classicas.
+#'   Default: \code{ndec=2}.
+#' @param acer Codigo para a representacao do acerto no arquivo de saida.
+#'   Default: \code{acer='1'}
+#' @param erro Codigo para a representacao do erro no arquivo de saida.
+#'   Default: \code{erro='0'}
+#' @param napres Codigo para a representacao do item, quando nao apresentado
+#'   ao estudante, no arquivo de saida. Default: \code{napres='9'}
+#'  @param peso vetor de pesos: Default: \code{peso = FALSE}
+#'  @param mostra_napres indicador sobre como os itens nao apresentados aos alunos
+#'    devem ser exibidos. Default: \code{mostra_napres = 0}, ou seja o não apresentado
+#'    é desconsiderado das médias dos alunos. \code{mostra_napres = 1} o não apresentado
+#'    entra nas contas como se fosse uma resposta possível.#'  
+#'
+#' @return O arquivo de saida desta funcao eh composto por 4 objetos
+#'   dispostos em uma lista.
+#' @return CTT[[1]] \code{data.frame} com as estatisticas classicas para
+#'   todos os itens. Cada item eh uma linha deste objeto.
+#' @return CTT[[2]] \code{data.frame} contendo: padrao de respostas:
+#'   acerto = \code{acer}, erro = \code{erro} e
+#'   item nao apresentado = \code{napres}; numero de acertos, numero de itens
+#'   realizados pelo aluno, percentual de acertos e numero de acertos por bloco.
+#' @return CTT[[3]] \code{data.frame} com as estatiticas classicas para os
+#'   itens que podem ter apresentado algum problema. No caso, itens com 2 ou
+#'   mais coeficientes bisseriais positivos e itens com coeficiente biserial
+#'   abaixo de 0.15
+#'
+#' @examples 
+#' data("quest_dados")
+#' data("gabpar05P")
+#'
+#' 
+#' item_prova <- matrix(c(1:36,13:36,1:12,25:36,1:24),byrow = T,ncol=36)
+#' colnames(item_prova) <- paste('it',sprintf("%02d",1:36),sep='')
+#' rownames(item_prova) <- 1:nrow(item_prova)
+#' 
+#' dadosP <- quest_dados[nchar(quest_dados$rsp_por)==36,]
+#' dadosP <- quest_dados[nchar(quest_dados$rsp_por)==36 & !is.na(quest_dados$cad_por),]
+#'
+#' CTT1(
+#'   data = dadosP,
+#'   ids = c('codesc','turma','id'),
+#'   vars = c('cad_por','rsp_por'),
+#'   peso = FALSE,
+#'   nitems = 36,
+#'   nitemform = 36,
+#'   nforms = 3,
+#'   gab = gabpar05P$gab,
+#'   resp_possible = c(LETTERS[1:4]," ","*"),
+#'   items = item_prova,
+#'   ndec = 2,
+#'   nblform = 3,
+#'   tbl = 12,
+#'   nbl = 3,
+#'   acer = '1',
+#'   erro = '0',
+#'   napres = '9',
+#'   calc_normit = F)
+#'    
+#' @seealso \code{\link{RespItem}},\code{\link{Escore}},
+#'          \code{\link{PontoBisserial}}, \code{\link{ItemPos}},
+#'          \code{\link{write.ctt}}
+#' @export
+
+
+
+# data = conjunto de dados a ser utilizados
+# ids = nome das colunas que identificam os dados
+# vars = variaveis que serao utilizadas na ordem: caderno e respostas
+
+
 CTT1 <- function (data, ids, vars, peso = FALSE, nitems, nforms, nitemform, 
                   nblform, nbl, tbl, gab, resp_possible, items, ndec = 2, 
                   acer = "1", erro = "0", napres = "9", mostra_napres = 0, 
@@ -110,9 +208,9 @@ CTT1 <- function (data, ids, vars, peso = FALSE, nitems, nforms, nitemform,
     dummyitem[!aux] <- 0
     dummyitem <- as.integer(dummyitem)
     
-    ginf <- scoreitem <= Hmisc::wtd.quantile(x = scoreitem, weights = pesomodi, probs = 0.27)
+    ginf <- scoreitem <= CesgTools::wtd.quantile(x = scoreitem, weights = pesomodi, probs = 0.27)
     
-    gsup <- scoreitem >= Hmisc::wtd.quantile(x = scoreitem, weights = pesomodi, probs = 1 - 0.27)
+    gsup <- scoreitem >= CesgTools::wtd.quantile(x = scoreitem, weights = pesomodi, probs = 1 - 0.27)
     
     CTTest[[1]][i, "QTD_RESP"] <- length(dummyitem)
     

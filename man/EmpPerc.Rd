@@ -4,8 +4,20 @@
 \alias{EmpPerc}
 \title{Sum of vector elements.}
 \usage{
-EmpPerc(items, responses, vecform, profi, resp_possible, nitems, nitemform,
-  nforms, min_break, max_break, by_break, escala0100 = F)
+EmpPerc(
+  items,
+  responses,
+  vecform,
+  profi,
+  resp_possible,
+  nitems,
+  nitemform,
+  nforms,
+  min_break,
+  max_break,
+  by_break,
+  escala0100 = F
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

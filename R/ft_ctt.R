@@ -5,7 +5,7 @@
 
 
 #ft_ctt(ctt = cbind(ctt_ENCCEJA_1811001_EM_CH_20180921_idprova201812[[1]][1,],
-#                   BL = as.integer(1), OB = as.integer(1), codbni  = as.integer(50000)),
+#                   BL = as.integer(1), OB = as.integer(1), coditem  = as.integer(50000)),
 #       numalt = 5,
 #       ndec = 2,
 #       sep = ',',
@@ -17,7 +17,7 @@ ft_ctt <- function(ctt, numalt = 5, ndec = 2, sep = ',', cores){
   resp_possible2 <- c(LETTERS[1:numalt],"*"," ")
   
   #definindo colunas
-  cols <- c('IT','BL','OB','codbni','GAB','DIFI','DISCR','ABAI','ACIM','BISE',
+  cols <- c('IT','BL','OB','coditem','GAB','DIFI','DISCR','ABAI','ACIM','BISE',
             paste('Perc',resp_possible,sep = ''),
             paste('Bise',resp_possible,sep = ''))
   

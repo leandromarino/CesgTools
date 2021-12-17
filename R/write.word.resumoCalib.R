@@ -5,7 +5,7 @@
 # gabpar = gabparEncc18CH_EMv1
 # ctt = cbind(ctt_ENCCEJA_1811001_EM_CH_20180921_idprova201812[[1]], 
 #             BL = as.integer(1), OB = as.integer(1:30), 
-#             codbni = as.integer(gabparEncc18CH_EMv1$codbni))
+#             coditem = as.integer(gabparEncc18CH_EMv1$coditem))
 # difph1 = difph1Encc18CH_EMv1
 # difResumo = difResumoEncc18CH_EFv1
 # dirgraf = paste0(dirEncc18,'Resultados/GraficosItens/CH_EMv1/')
@@ -22,9 +22,31 @@ write.word.resumoCalib <- function(
   numalt, dirgraf, dirsaida,
   cores = c("#E6E6E6", "#CCCCCC", "#B3B3B3", "#999999", "#4C4C4C", "#333333", "#191919")
   ){
+
+  
+  
+  
+  
   
   grafs <- dir(dirgraf)
-  grafs_codbni <- as.integer(substring(grafs, nchar(grafs) - 8, nchar(grafs) - 4))
+  
+  pega_ultimo_elemento <- function(x){
+    result <- x[nrow(x),] %>% unlist %>% unique
+    if(length(result) > 1){
+      stop('Existem dois símbolos em sequência!')
+    }
+    
+    result
+  }
+  
+  ini <- stringr::str_locate_all(string = grafs, pattern =  "_")   %>% lapply(., pega_ultimo_elemento) %>% unlist() + 1
+  fim <- stringr::str_locate_all(string = grafs, pattern =  "\\.") %>% lapply(., pega_ultimo_elemento) %>% unlist() - 1
+  
+  grafs_coditem <- substring(grafs, ini, fim)
+  
+  rm(ini, fim)
+  
+  
   
   output <- officer::read_docx(path = paste0(dirsaida, 'Resumo_Template.docx')) 
   officer::styles_info(output)
@@ -43,21 +65,21 @@ write.word.resumoCalib <- function(
   
   output <- officer::body_add_break(output)
   
-
-  itematual = 22
+  
+  # itematual = 22
   for(itematual in 1:nrow(gabpar)){
     
     cat(paste0('Exportando Item : ', sprintf("%02d", itematual), ' de ', sprintf('%02d', nrow(gabpar)), '\r'))
     
     (.aux_ctt <- ctt[itematual, ])
     (.aux_gabpar <- gabpar[itematual, ])
-    (.aux_grafs <- grafs[grafs_codbni == .aux_gabpar$codbni])
+    (.aux_grafs <- grafs[grafs_coditem == .aux_gabpar$coditem])
     
     (.aux_grafcci <- .aux_grafs[substr(.aux_grafs,1,3) == "CCI"])
     (.aux_grafcomuns <- .aux_grafs[substr(.aux_grafs,1,3) == "Com"])
     
-    (.aux_difph1 <- difph1[difph1$coditem == .aux_gabpar$codbni,])
-    (.aux_difResumo <- difResumo[difResumo$codbni == .aux_gabpar$codbni,])
+    (.aux_difph1 <- difph1[difph1$coditem == .aux_gabpar$coditem,])
+    (.aux_difResumo <- difResumo[difResumo$coditem == .aux_gabpar$coditem,])
     
     if(nrow(.aux_difResumo) > 0){
       (.verificaItem <- sum(.aux_difResumo[, c('Mod_x_G1', 'Mod_x_G2', 'G1_x_G2')] > .12) > 0)
@@ -69,7 +91,7 @@ write.word.resumoCalib <- function(
     output <- officer::body_add_par(x = output, 
                                     value = paste0("Item: ", sprintf('%02d', itematual),
                                                    " de ", nrow(gabpar),
-                                                   " | Código: ", .aux_gabpar$codbni,
+                                                   " | Código: ", .aux_gabpar$coditem,
                                                    ifelse(.verificaItem, ' (ITEM COM POTENCIAL PROBLEMA)', '')), 
                                     style = "heading 2")
     
@@ -88,7 +110,7 @@ write.word.resumoCalib <- function(
                                     height = 8.18 / 2.54)
     output <- officer::body_add_par(x = output, value = '', style = "Normal")
     
-    if(length(.aux_grafcomuns) > 0){
+    if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 0){
       
       ### dif tct
       output <- officer::body_add_par(x = output,
@@ -119,13 +141,21 @@ write.word.resumoCalib <- function(
                                           style = "centered")
         }else{
           output <- officer::slip_in_img(x = output, 
-                                          src = paste0(dirgraf, .aux_grafcomuns[i]), 
-                                          width =  7.0 / 2.54,
-                                          height = 7.0 / 2.54, 
-                                          pos = 'after')
+                                         src = paste0(dirgraf, .aux_grafcomuns[i]), 
+                                         width =  7.0 / 2.54,
+                                         height = 7.0 / 2.54, 
+                                         pos = 'after')
         }
       }
     }
+    
+    if(length(.aux_grafcomuns) > 0 & .aux_gabpar$aban == 1){
+      output <- officer::body_add_par(x = output, 
+                                      value = paste0('Item comum que foi abandonado no grupo 2: ', 
+                                                     .aux_difResumo$tipodif_G1_x_G2), 
+                                      style = "Normal")
+      }
+    
     output <- officer::body_add_break(output)
     
   }
@@ -136,13 +166,16 @@ write.word.resumoCalib <- function(
   
   
   print(output, target = paste0(dirsaida, 'ResumoCalib_',sufixo,'.docx')) 
+  
+  
+
 }
 
 # write.word.resumoCalib(
 #   gabpar = gabparEncc18CH_EMv1,
 #   ctt = cbind(ctt_ENCCEJA_1811001_EM_CH_20180921_idprova201812[[1]], 
 #               BL = as.integer(1), OB = as.integer(1:30), 
-#               codbni = as.integer(gabparEncc18CH_EMv1$codbni)),
+#               coditem = as.integer(gabparEncc18CH_EMv1$coditem)),
 #   difph1 = difph1Encc18CH_EMv1,
 #   difResumo = difResumoEncc18CH_EFv1, 
 #   titulo = 'ENCCEJA 2018 - Ciências Humanas - Ensino Médio - BR REG',

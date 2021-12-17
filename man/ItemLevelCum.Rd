@@ -4,8 +4,14 @@
 \alias{ItemLevelCum}
 \title{Sum of vector elements.}
 \usage{
-ItemLevelCum(empperccum, num_min = 20, min_break = NULL,
-  max_break = NULL, ndec = 2, escala0100 = T)
+ItemLevelCum(
+  empperccum,
+  num_min = 20,
+  min_break = NULL,
+  max_break = NULL,
+  ndec = 2,
+  escala0100 = T
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

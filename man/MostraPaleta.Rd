@@ -17,4 +17,5 @@ Exibe Paleta de cores
 ## 
  MostraPaleta(c('blue','cyan','red','yellow'))
  
+ 
 }

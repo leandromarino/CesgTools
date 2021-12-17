@@ -4,8 +4,22 @@
 \alias{GrafItemCom3}
 \title{Sum of vector elements.}
 \usage{
-GrafItemCom3(dirgrf, nomgrf, anos, gabitem, itcom1, param1, rj1, percpr1,
-  itcom2, param2, rj2, percpr2, ger, geral)
+GrafItemCom3(
+  dirgrf,
+  nomgrf,
+  anos,
+  gabitem,
+  itcom1,
+  param1,
+  rj1,
+  percpr1,
+  itcom2,
+  param2,
+  rj2,
+  percpr2,
+  ger,
+  geral
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

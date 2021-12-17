@@ -1,11 +1,13 @@
-# dados = parmatBRA15CHV2[102:181,c('It','aorig','borig','c')]
-# file = paste0(dirBrad16,'Blg\\CH\\','ItensFixBra15HumV2.PRM')
-# add = TRUE
-
-write.prmBlg <- function(dados,file, add = FALSE)
+write.prmBlg <- function(dados,file, add = FALSE, menor_item = NULL)
 {
   colnames(dados) <- c('it','a','b','c')
   dados[,c('a','b','c')] <- format(round(dados[,c('a','b','c')],5),ndigits =5, nsmall = 5)
+  
+  dados <- dados[order(dados$it), ]
+  
+  if(!is.null(menor_item)){
+    dados <- dados[dados$it > menor_item,]
+  }
   
   if(add == FALSE){
     # dados <- itfixBra1502M[,c('itemblg','a','b','c')]
@@ -20,5 +22,4 @@ write.prmBlg <- function(dados,file, add = FALSE)
     write.table(dados,file,col.names=F,row.names=F,quote=F,append = T, sep='\t')
   }
 }
-
 

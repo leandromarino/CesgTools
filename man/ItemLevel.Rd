@@ -4,8 +4,15 @@
 \alias{ItemLevel}
 \title{Sum of vector elements.}
 \usage{
-ItemLevel(EmpPerc, gabpar, colsgabpar, num_min = 50, min_break = NULL,
-  max_break = NULL, ndec = 2)
+ItemLevel(
+  EmpPerc,
+  gabpar,
+  colsgabpar,
+  num_min = 50,
+  min_break = NULL,
+  max_break = NULL,
+  ndec = 2
+)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

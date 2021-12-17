@@ -1,4 +1,6 @@
-read.blm.grou <-function(file, group.names = F){
+
+read.blm.grou <- function(file, group.names = F){
+  
   blm <- readLines(con = file)
   check_grou <- substr(blm, 1, 5) == ">GROU"
   check_estr <- substr(blm, 1, 1) == "("
@@ -18,12 +20,20 @@ read.blm.grou <-function(file, group.names = F){
   }
   
   if(group.names){
-    group_names <- strsplit(blm[check_grou],',')
-    group_names <- unlist(lapply(group_names,'[',i=1))
-    group_names <- strsplit(group_names,'=')
-    group_names <- unlist(lapply(group_names,'[',i=2))
-    group_names <- gsub(pattern = "'", replacement = '', x = group_names)
+    blm_group <- blm[ min(which(check_grou)) : which(check_estr) ]
+    
+    grp_name_ini <- stringr::str_locate_all(string = paste0(blm_group, collapse = ''), 
+                                            pattern = "GNA[:alpha:]{0,}\\s{0,}=\\s{0,}\"{0,}\'{0,}")[[1]][,'end']+1
+    
+    grp_name_fim <- stringr::str_locate_all(string = paste0(blm_group, collapse = ''),
+                                            pattern = "\'{0,}\\,{0,}\\s{0,}LEN[:alpha:]{0,}\\s{0,}=\\s{0,}")[[1]][,'start']-1
+    group_names <- 
+      blm_group %>% 
+      paste0(., collapse = '') %>% 
+      substring(., first = grp_name_ini, last = grp_name_fim) %>% 
+      removeBrancos(.)
     names(group) <- group_names
+    
     rm(group_names)
   }
   

@@ -37,17 +37,24 @@
 #'   Para gerar arquivos mais leves utilizar \code{back = 'white'}.
 #' @param retangulo Booleano que indica se o retangulo cinza deve ser plotado
 #'    como fundo do grafico (estilo ggplot2). Default: \code{retangulo = F}.
+#' @param bg.cor cor do retângulo interno
+#' @param plot Indicador para o tipo de gráfico que deve ser plotado \code{c('all', 'alt', 'tri')}. 
+#'    Default: \code{plot = 'all'}.
 #'
 #' @return
 #'    A saida desta funcao eh um grafico.
 #' @examples
 #' ## ainda falta adicionar alguns exemplos
+#' @export
 
-Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, titulo, aesc, besc,
-                         s12, m12,
-                         modo = 'normal', mincategoria = 30, limx = c(0,500), int  = 100, back = 'transparent',
-                         retangulo = F)
-{
+
+
+Grafico1pp <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, titulo, aesc, besc,
+                       s12, m12,
+                       modo = 'normal', mincategoria = 30, limx = c(0,500), int  = 100, back = 'transparent',
+                       retangulo = F, plot = 'all', bg.cor = 'gray90'){
+  # plot = c('all','alt','tri')
+  
   #browser()
   #   percemp = percempBra1505P                                                       # percentuais empiricos
   #   gabpar = gabparBra1505P                                                         # df com gabarito, informacoes blg e parametros dos itens
@@ -58,20 +65,22 @@ Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, 
   #   colsgabpar = c('it','bl','ob','itemblg','nomeblg','codigo','gab','atran','btran','c') # colunas de gabpar
   #
   #   percmodelo = rjprofiBra1505P                                                    # probabilidades de escolha da alternativa no modelo
-  #   item = 1                                                                        # indice do item que tera o grafico exportado
-  #   titulo = "Titulo do Grafico"                                                    # titulo do grafico
+  #   item = 1                                                                        # indice do item que terï¿½ o grï¿½fico exportado
+  #   titulo = "Titulo do Grï¿½fico"                                                    # titulo do grafico
   #   aesc = apor                                                                     # constante de transformacao para escala de divulgacao
   #   besc = bpor                                                                     # constante de transformacao para escala de divulgacao
   #   s12 = a051204p                                                                  # constante de transformacao para a escala saeb ou demais (0,1)
   #   m12 = b051204p                                                                  # constante de transformacao para a escala saeb ou demais (0,1)
   #   modo = 'normal'                                                                 # modo normal ou logistico
   #   mincategoria = 30                                                               # numero minimo para plotar as categorias do percemp
-  #   limx = c(-10,510)                                                               # limite de variacao eixo x
+  #   limx = c(-10,510)                                                               # limite de variaï¿½ï¿½o do eixo x
   #   percpr = percprBra1505P                                                         # percentis
   #   back = 'transparent'                                                            # background
-  #
-  #
   
+  
+  if(!(plot %in% c('all','alt','tri'))){
+    stop("Os tipos permitidos para plot são: \n 'all'  = (2 graf), \n 'alt' = (para o grafico de alternativas) \n 'tri' = (para o grafico com a curva tri)")
+  }
   
   gabpar <- gabpar[,colsgabpar]
   colnames(gabpar) <- c('it','bl','ob','itemblg','nomeblg','codigo','gab','a','b','c','aban')
@@ -79,7 +88,7 @@ Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, 
   PercEmp1 = percemp[[1]][[item]]
   PercEmp2 = percemp[[2]][[item]]
   
-  # selecionando as colunas validas, ou seja com mais de 30 respondentes
+  # selecionando as colunas vï¿½lidas, ou seja com mais de 30 respondentes
   colsgraf = c(1:ncol(PercEmp1))[colSums(PercEmp1) >= mincategoria]
   
   gab     = gabpar[item,'gab'    ]
@@ -123,65 +132,77 @@ Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, 
   par_at <- gabpar[item,'a'] * D / aesc
   par_bt <- aesc * gabpar[item,'b'] + besc
   
-  fun_rect <- function(corfundo='gray90',corlinha='white'){
-    rect(-1000,-1000,1000,1000,col=corfundo)
+  fun_rect <- function(corfundo = bg.cor, corlinha = 'white'){
+    rect(-10000,-10000,10000,10000, col = corfundo)
     abline(v=seq(limx[1],limx[2],int),lty=3,col=corlinha,lwd=1)
     abline(h=seq(0,1,.2),lty=3,col=corlinha,lwd=1)
   }
   
+  
   # definindo layout dos graficos de saida
-  layout(matrix(c(1,1,2,3,4,4), 3, 2, byrow = TRUE),widths=c(1,1), heights=c(1.7,10,1.2))
-  #grafico 1 = nada
+  
+  if(plot == 'all'){
+    layout(matrix(c(1,1,2,3,4,4), 3, 2, byrow = TRUE),widths=c(1,1), heights=c(2,9.5,1.2))
+  }
+  if(plot %in% c('tri','alt')){
+    layout(matrix(c(1,2,3), 3, 1, byrow = TRUE),widths=c(1,1), heights=c(2,9.5,1.2))
+  }
+  
+  
+  #grafico 1 = nada (titulo)
   par(mar=c(0,0,0,0))
   plot(0,0,xlim = c(limx[1]-int/5,limx[1]+int/5), ylim = c(0,1), type = 'n', axes = F, ylab = '', xlab = '')
   
-  
-  #grafico 2 = tri
-  par(mar = c(4,4,0,0)+0.1)
-  plot(0,0,xlim=limx,ylim=c(0,1),type='n',axes=F,ylab='Proporao de Resposta',xlab='Proficiencia')
-  #colocando o retangulo cinza
-  if(retangulo==T) fun_rect()
-  if(par_a!=0) curve(CesgTools::infoplogis3((x-besc)/aesc,par_a*D,par_b,par_c),type="l",add=T,col='gray50')
-  curve(CesgTools::plogis3(x, par_at, par_bt, par_c),add=T)
-  points(xq,rj,pch=0)
-  points(as.numeric(colnames(rt)),rt,pch=15)
-  abline(h=.65,lty=5)
-  axis(1,seq(limx[1],limx[2],int))
-  axis(2,seq(0,1,.2))
-  abline(v=percpr[c(2,8)],lty=2)
-  abline(v=percpr[c(3,7)],lty=3)
-  abline(v=percpr[c(5)],lty=4)
-  if(aban == 1){
-    text(x = sum(limx)/2, y = 0.5, 'X', cex = 8, col = 'red', font = 2)
+  if(plot == 'tri'| plot == 'all'){
+    #grafico 2 = tri
+    par(mar = c(4,4,0,0)+0.1)
+    plot(0,0,xlim=limx,ylim=c(0,1),type='n',axes=F,ylab='Proporção de Resposta',xlab='Proficiência')
+    #colocando o retangulo cinza
+    if(retangulo==T) fun_rect()
+    if(par_a!=0) curve(CesgTools::infoplogis3((x-besc)/aesc,par_a*D,par_b,par_c),type="l",add=T,col='gray50')
+    curve(CesgTools::plogis3(x, par_at, par_bt, par_c),add=T)
+    points(xq,rj,pch=0)
+    points(as.numeric(colnames(rt)),rt,pch=15)
+    abline(h=.65,lty=5)
+    axis(1,seq(limx[1],limx[2],int))
+    axis(2,seq(0,1,.2))
+    abline(v=percpr[c(2,8)],lty=2)
+    abline(v=percpr[c(3,7)],lty=3)
+    abline(v=percpr[c(5)],lty=4)
+    if(aban == 1){
+      text(x = sum(limx)/2, y = 0.5, 'X', cex = 8, col = 'red', font = 2)
+    }
+    box()
   }
   
-  box()
-  
-  #grafico 3 = alternativa
-  par(mar = c(4,4,0,0)+0.1)
-  plot(0,0,xlim = limx, ylim = c(0,1), type = 'n', axes = F, ylab = 'Proporcao de Resposta', xlab = 'Proficiencia')
-  #colocando o retangulo cinza
-  if(retangulo==T) fun_rect()
-  for(i in 1:nalt){
-    lines(x=as.numeric(colnames(PercEmp1)[colsgraf]),y=PercEmp2[i,colsgraf],type="b", pch=LETTERS[i])
+  if(plot == 'alt' | plot == 'all'){
+    #grafico 3 = alternativa
+    par(mar = c(4,4,0,0)+0.1)
+    plot(0,0,xlim = limx, ylim = c(0,1), type = 'n', axes = F, ylab = 'Proporção de Resposta', xlab = 'Proficiência')
+    #colocando o retangulo cinza
+    if(retangulo==T) fun_rect()
+    for(i in 1:nalt){
+      lines(x=as.numeric(colnames(PercEmp1)[colsgraf]),y=PercEmp2[i,colsgraf],type="b", pch=LETTERS[i])
+    }
+    axis(1,seq(limx[1],limx[2],int))
+    axis(2,seq(0,1,.2))
+    abline(h=.65,lty=5)
+    abline(v=percpr[c(2,8)],lty=2)
+    abline(v=percpr[c(3,7)],lty=3)
+    abline(v=percpr[c(5)],lty=4)
+    box()
   }
-  axis(1,seq(limx[1],limx[2],int))
-  axis(2,seq(0,1,.2))
-  abline(h=.65,lty=5)
-  abline(v=percpr[c(2,8)],lty=2)
-  abline(v=percpr[c(3,7)],lty=3)
-  abline(v=percpr[c(5)],lty=4)
-  box()
   
   
   ##grafico 4 = nada
   par(mar=c(0,0,0,0))
   plot(0,0,xlim = limx, ylim = c(0,1), type = 'n', axes = F, ylab = '', xlab = '')
-  legend('center',c('5 e 95','10 e 90','50'),title='Percentis:',lty = c(2:4),box.col='transparent',bg='gray95' ,ncol=3)
+  legend('center', c('5 e 95','10 e 90','50'), title = 'Percentis:',lty = c(2:4),
+         box.col = 'transparent', bg = bg.cor, ncol = 3) 
   
   
   ### titulo do grafico
-  title(titulo, outer=TRUE ,line =-1 , cex.main=1.5,font=4)
+  title(titulo, outer=TRUE ,line =-1.5 , cex.main=1.5,font=4)
   
   title(substitute(bold('It: ')~Cit~bold('  Bl:')~Cbl~
                      bold('  Ob:')~Cob~bold('  Ibg:')~CIbg~
@@ -193,7 +214,7 @@ Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, 
                         CNbg=nomeblg,
                         Cgab=gab,
                         CCod=codigo)),
-        outer=T,line=-2.1,cex.main=1.5)
+        outer=T,line=-3,cex.main=1.5)
   
   formata <- function(valor,dig,dec=',') format(round(valor,digits=dig),ndigits=dig,nsmall=dig,dec=dec)
   
@@ -206,26 +227,7 @@ Graficos1ppA <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, 
                         Ca = formata(par_a*D,5),
                         Cb = formata(par_b,5),
                         Cc = formata(par_c,5))),
-        line=-3.4,font.main=1, cex.main=1.5,outer=T)
-  
+        line=-4.8,font.main=1, cex.main=1.5,outer=T)
 }
 
 
-#
-#
-# Graficos1pp(percemp =percempBra1505P,
-#             gabpar = gabparBra1505P,
-#             colsgabpar = c('it','bl','ob','itemblg','nomeblg','codigo','gab','atran','btran','c'),
-#             percmodelo = rjprofiBra1505P,
-#             item = 1,
-#             titulo = "Titulo do Gráfico",
-#             aesc = apor,
-#             besc = bpor,
-#             s12 = a051204p,
-#             m12 = b051204p,
-#             modo = 'normal',
-#             mincategoria = 30,
-#             limx = c(-10,510),
-#             percpr = percprBra1505P,
-#             back = 'transparent',
-#             retangulo = T)

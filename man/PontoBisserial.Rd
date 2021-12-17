@@ -4,8 +4,15 @@
 \alias{PontoBisserial}
 \title{Calcula o Ponto Bisserial por alternativa}
 \usage{
-PontoBisserial(respostas, scores, itempos, resposta_possivel, CodNaoAp,
-  Peso, mostra_napres)
+PontoBisserial(
+  respostas,
+  scores,
+  itempos,
+  resposta_possivel,
+  CodNaoAp,
+  Peso,
+  mostra_napres
+)
 }
 \arguments{
 \item{respostas}{Objeto do tipo \code{data.frame} com duas colunas

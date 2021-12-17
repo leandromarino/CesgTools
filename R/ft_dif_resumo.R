@@ -14,7 +14,7 @@
 ft_dif_resumo <- function(dif_resumo, ndec = 4, sep = ',', cores){
 
   #definindo colunas
-  cols <- c('codbni', 'nomeblg', 'a', 'b', 'c', 'tipodif_G1_x_G2', 'Mod_x_G1', 'Mod_x_G2', 'G1_x_G2')
+  cols <- c('coditem', 'nomeblg', 'a', 'b', 'c', 'tipodif_G1_x_G2', 'Mod_x_G1', 'Mod_x_G2', 'G1_x_G2')
   
   #filtrando arquivo
   aux_dif_resumo <- dif_resumo[,cols]
@@ -39,7 +39,7 @@ ft_dif_resumo <- function(dif_resumo, ndec = 4, sep = ',', cores){
   cols_par <- c('a','b','c')
   aux_dif_resumo[,cols_par] <- formata_ctt(aux_dif_resumo[,cols_par], dig = ndec, dec = sep)
   rm(cols_par)
-  aux_dif_resumo$codbni <- as.integer(aux_dif_resumo$codbni) 
+  aux_dif_resumo$coditem <- as.integer(aux_dif_resumo$coditem) 
     
   ft_dif_resumo <- flextable::regulartable(aux_dif_resumo)
   ft_dif_resumo <- flextable::set_header_df(x = ft_dif_resumo, mapping = titulos, key = 'chave')

@@ -9,7 +9,7 @@ read.blm.nomeblg <- function(file, debug = FALSE){
   fim <- c(which(check_item == TRUE)[-1],which(check_test == TRUE)[1])-1
   
   nomeblg <- blm[inicio:fim]
-  nomeblg <- trim(nomeblg) %>% .[. != '']
+  nomeblg <- stringr::str_trim(nomeblg) %>% .[. != '']
   nomeblg <- paste0(nomeblg, ',') %>% gsub("\n", ',', .) %>% gsub(",,", ',', .)
   nomeblg <- paste0(nomeblg, collapse = '')
   nomeblg <- unlist(nomeblg)
@@ -17,7 +17,7 @@ read.blm.nomeblg <- function(file, debug = FALSE){
   nomeblg <- strsplit(x = nomeblg, split = ')')[[1]][1]
   
   nomeblg <- strsplit(nomeblg[[1]], ',')
-  nomeblg <- as.list(trim(unlist(nomeblg)))
+  nomeblg <- as.list(stringr::str_trim(unlist(nomeblg)))
   
   indices_fortran <- grep(pattern = '.*[(].*',nomeblg) #Elementos do vetor
   

@@ -38,7 +38,7 @@ gab <- matrix(NA, nrow = length(respostas), ncol = nrow(blm_str)) %>%
   set_colnames(rownames(blm_str)) %>%
   dplyr::mutate(id        = 1:length(!!respostas) %>% 
                   gera_dv() %>% 
-                  stringr::str_pad(., width = blm_str$stru[1], pad = '0'),
+                  stringr::str_pad(., width = blm_str$tamanho[1], pad = '0'),
                 caderno   = formini + (1:nrow(itens)),
                 grupo     = !!grupo,
                 respostas = !!respostas)
@@ -48,7 +48,7 @@ if(!is.null(file)){
   cat('Exportando arquivo de gabaritos\n')
   gdata::write.fwf(x = gab, file = file, append = TRUE, quote = FALSE, 
                    sep = '', na = '', rownames = FALSE, colnames = FALSE, 
-                   width = blm_str$stru)
+                   width = blm_str$tamanho)
 }
 
 gab

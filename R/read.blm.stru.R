@@ -5,6 +5,7 @@ read.blm.stru <- function(file, debug = FALSE){
   if(sum(grepl(pattern = 'NGR', blm)) > 0){ grp = 1 }else{ grp = 0 }
   
   blm <- blm[substr(blm, 1, 1) == '(']
+  blm <- blm[length(blm)]
   blm <- strsplit(blm, '[(]|[,]|[)]') %>% unlist() %>% .[.!='']
   
   if(length(grep('X', blm)) > 0){

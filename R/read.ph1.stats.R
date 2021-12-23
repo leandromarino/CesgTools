@@ -15,7 +15,7 @@ read.ph1_stats <- function(file){
                                widths = c(05, 11, 09, 10, 08, 09, 10, 09), 
                                col.names = c('itemblg','nomeblg','ntried','right','pct','logit','corr','bise'),
                                as.is = T)
-    ph1.stats[[i]]$nomeblg <- trim(ph1.stats[[i]]$nomeblg)
+    ph1.stats[[i]]$nomeblg <- stringr::str_trim(ph1.stats[[i]]$nomeblg)
   }
   
   ini <- substr(ph1, 1, 27) == ' ITEM STATISTICS FOR GROUP:' | substr(ph1, 1, 27) == ' ITEM STATISTICS FOR MULTIP'

@@ -46,19 +46,12 @@ write.blm_form <- function(gabpar, bib, formini)
     L2[j,tbl] <- gsub(',',');',L2[j,tbl])
     
     if(tbl * 6 > 79){
-      if(tbl %% 2 == 0){
-        # --- se o divisor for igual a 0 então basta dobrar o numero 
-        #     de linhas da matriz
-        L2 <- matrix(as.vector(t(L2)), nrow = nblfo*2, ncol = tbl/2, byrow = T)
-      }else{
-        # --- se o divisar for diferente de 0 então rola uma treta...
-        NROW <- c((nblfo + 1):30)
-        p1 = (nblfo * tbl) %% NROW == 0
-        p2 = ((nblfo * tbl) / NROW) * 5 < 78
-        aux  <- (p1 + p2)
-        NROW <- NROW[aux == 2][1]
-        L2 <- matrix(as.vector(t(L2)), nrow = NROW, byrow = TRUE)
-      }
+      aux_lin <- ceiling((ncol(L2) * 6) / 79) 
+      aux_col <- ceiling(ncol(L2) / aux_lin)
+      aux_matrix <- matrix('', ncol = aux_lin, nrow = aux_col, byrow = TRUE)
+      aux_matrix[1:ncol(L2)] <- as.vector(L2)
+      L2 <- t(aux_matrix)
+      rm(aux_matrix, aux_lin, aux_col)
     }
     write.table(L1, quote = F,row.names = F,col.names = F, sep='')
     write.table(L2, quote = F,row.names = F,col.names = F, sep='')

@@ -5,7 +5,7 @@ read.bisblg <- function (caminho, grp, dif = FALSE)
   
   PH1_input <- readChar(con = caminho, nchars = file.info(caminho)$size)
   PH1_inp <- stringr::str_match(PH1_input, "\\n\\s*>INP\\w*\\s*[\\S\\s]*?;")
-  PH1_ngrp <- as.numeric(stringr::str_match(PH1_inp, "NGRO\\w*\\s*=\\s*?(\\d+)")[,2])
+  PH1_ngrp <- as.numeric(stringr::str_match(PH1_inp, "NGR\\w*\\s*=\\s*?(\\d+)")[,2])
   Resultados <- list()
   for (grupo in 1:PH1_ngrp) {
     PH1_grpn <- stringr::str_match(PH1_input, paste0("ITEM STATISTICS FOR GROUP:\\s*", 

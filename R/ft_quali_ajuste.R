@@ -34,8 +34,8 @@ ft_quali_ajuste <- function(qualiaju, ndec = 3, sep = ',', cores){
   ft_qualiaju <- flextable::theme_zebra(ft_qualiaju, 
                                         odd_header = cores[5], odd_body = cores[1], 
                                         even_header = cores[5], even_body = cores[2])
-  ft_qualiaju <- flextable::hline(ft_qualiaju, border = fp_border(width = 1.5, color = 'white'), part = 'all')
-  ft_qualiaju <- flextable::vline(ft_qualiaju, border = fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_qualiaju <- flextable::hline(ft_qualiaju, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_qualiaju <- flextable::vline(ft_qualiaju, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
   ft_qualiaju <- flextable::align(ft_qualiaju, align = "center", part = "all" )
   ft_qualiaju <- flextable::fontsize(ft_qualiaju, size = 9, part = 'header')
   ft_qualiaju <- flextable::fontsize(ft_qualiaju, size = 8, part = 'body')

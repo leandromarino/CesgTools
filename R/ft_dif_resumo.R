@@ -48,8 +48,8 @@ ft_dif_resumo <- function(dif_resumo, ndec = 4, sep = ',', cores){
   ft_dif_resumo <- flextable::theme_zebra(ft_dif_resumo, 
                                    odd_header = cores[5], odd_body = cores[1], 
                                    even_header = cores[5], even_body = cores[2])
-  ft_dif_resumo <- flextable::hline(ft_dif_resumo, border = fp_border(width = 1.5, color = 'white'), part = 'all')
-  ft_dif_resumo <- flextable::vline(ft_dif_resumo, border = fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_dif_resumo <- flextable::hline(ft_dif_resumo, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_dif_resumo <- flextable::vline(ft_dif_resumo, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
   ft_dif_resumo <- flextable::align(ft_dif_resumo, align = "center", part = "all" )
   ft_dif_resumo <- flextable::fontsize(ft_dif_resumo, size = 9, part = 'header')
   ft_dif_resumo <- flextable::fontsize(ft_dif_resumo, size = 8, part = 'body')

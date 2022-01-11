@@ -55,8 +55,8 @@ ctt[,cols_num] <- formata_ctt(ctt[,cols_num])
   ft_ctt <- flextable::theme_zebra(ft_ctt, 
                         odd_header = cores[7], odd_body = cores[1], 
                         even_header = cores[5], even_body = cores[2])
-  ft_ctt <- flextable::hline(ft_ctt, border = fp_border(width = 1.5, color = 'white'), part = 'all')
-  ft_ctt <- flextable::vline(ft_ctt, border = fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_ctt <- flextable::hline(ft_ctt, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_ctt <- flextable::vline(ft_ctt, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
   ft_ctt <- flextable::align(ft_ctt, align = "center", part = "all" )
   ft_ctt <- flextable::fontsize(ft_ctt, size = 9, part = 'all')
   ft_ctt <- flextable::fontsize(ft_ctt, i = 2, size = 8, part = 'header')

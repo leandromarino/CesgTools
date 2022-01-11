@@ -42,8 +42,8 @@ ft_dif_ph1 <- function(dif_ph1, ndec = 4, sep = ',', cores){
   ft_dif_ph1 <- flextable::theme_zebra(ft_dif_ph1, 
                                           odd_header = cores[5], odd_body = cores[1], 
                                           even_header = cores[5], even_body = cores[2])
-  ft_dif_ph1 <- flextable::hline(ft_dif_ph1, border = fp_border(width = 1.5, color = 'white'), part = 'all')
-  ft_dif_ph1 <- flextable::vline(ft_dif_ph1, border = fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_dif_ph1 <- flextable::hline(ft_dif_ph1, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
+  ft_dif_ph1 <- flextable::vline(ft_dif_ph1, border = officer::fp_border(width = 1.5, color = 'white'), part = 'all')
   ft_dif_ph1 <- flextable::align(ft_dif_ph1, align = "center", part = "all" )
   ft_dif_ph1 <- flextable::fontsize(ft_dif_ph1, size = 9, part = 'header')
   ft_dif_ph1 <- flextable::fontsize(ft_dif_ph1, size = 8, part = 'body')

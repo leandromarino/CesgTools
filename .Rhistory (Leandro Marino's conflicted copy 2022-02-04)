@@ -1,0 +1,16 @@
+usethis::use_git_config(user.name = 'Leandro Marino', user.email = 'leandromarino@leandromarino.com.br')
+library(CesgTools)
+library(CesgTools)
+library(CesgTools)
+?fp_border
+flextable::fp_border
+flextable:::fp_border
+library(CesgTools)
+library(CesgTools)
+library(CesgTools)
+library(CesgTools)
+Sys.getlocale()
+library(CesgTools)
+library(CesgTools)
+library(CesgTools)
+library(CesgTools)

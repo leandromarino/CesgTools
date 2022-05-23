@@ -202,32 +202,67 @@ Grafico1pp <- function(percemp, gabpar, colsgabpar, percmodelo, percpr, item, ti
   
   
   ### titulo do grafico
-  title(titulo, outer=TRUE ,line =-1.5 , cex.main=1.5,font=4)
+  if(plot ==  'all'){
+    title(titulo, outer=TRUE ,line =-1.5 , cex.main=1.5,font=4)
+    
+    title(substitute(bold('It: ')~Cit~bold('  Bl:')~Cbl~
+                       bold('  Ob:')~Cob~bold('  Ibg:')~CIbg~
+                       bold('  Nbg:')~CNbg~bold('  Gab:')~Cgab~bold('  Cod: ')~CCod,
+                     list(Cit=sprintf("%03d",it),
+                          Cbl=sprintf("%02d",bl),
+                          Cob=sprintf('%02d',ob),
+                          CIbg=sprintf("%03d",as.integer(itemblg)),
+                          CNbg=nomeblg,
+                          Cgab=gab,
+                          CCod=codigo)),
+          outer=T,line=-3,cex.main=1.5)
+    
+    formata <- function(valor,dig,dec=',') format(round(valor,digits=dig),ndigits=dig,nsmall=dig,dec=dec)
+    
+    title(substitute(bold("a=")~Cat~bold("  b=")~Cbt~bold("  c=")~Cct~
+                       italic("  Parametros originais (modo logistico):")~
+                       bold("  a=")~Ca~bold("  b=")~Cb~bold("  c=")~Cc,
+                     list(Cat= formata(par_at,2),
+                          Cbt= formata(par_bt,2),
+                          Cct= formata(par_c,2),
+                          Ca = formata(par_a*D,5),
+                          Cb = formata(par_b,5),
+                          Cc = formata(par_c,5))),
+          line=-4.8,font.main=1, cex.main=1.5,outer=T)
+  }else{
+    
+    
+    title(titulo, outer=TRUE ,line =-1.5 , cex.main=1.5,font=4)
+    
+    title(substitute(bold('It: ')~Cit~bold('  Bl:')~Cbl~
+                       bold('  Ob:')~Cob~bold('  Ibg:')~CIbg~
+                       bold('  Nbg:')~CNbg~bold('  Gab:')~Cgab~bold('  Cod: ')~CCod,
+                     list(Cit=sprintf("%03d",it),
+                          Cbl=sprintf("%02d",bl),
+                          Cob=sprintf('%02d',ob),
+                          CIbg=sprintf("%03d",as.integer(itemblg)),
+                          CNbg=nomeblg,
+                          Cgab=gab,
+                          CCod=codigo)),
+          outer=T,line=-3,cex.main=1.5)
+    
+    formata <- function(valor,dig,dec=',') format(round(valor,digits=dig),ndigits=dig,nsmall=dig,dec=dec)
+    
+    title(substitute(bold("a=")~Cat~bold("  b=")~Cbt~bold("  c=")~Cct,
+                     list(Cat= formata(par_at,2),
+                          Cbt= formata(par_bt,2),
+                          Cct= formata(par_c,2))),
+          line=-4.8,font.main=1, cex.main=1.5,outer=T)
+    
+    title(substitute(italic("  Parametros originais (modo logistico):")~
+                      bold("  a=")~Ca~bold("  b=")~Cb~bold("  c=")~Cc,
+                     list(Ca = formata(par_a*D,5),
+                          Cb = formata(par_b,5),
+                          Cc = formata(par_c,5))),
+          line=-6.6,font.main=1, cex.main=1.5,outer=T)
+    
+  }
   
-  title(substitute(bold('It: ')~Cit~bold('  Bl:')~Cbl~
-                     bold('  Ob:')~Cob~bold('  Ibg:')~CIbg~
-                     bold('  Nbg:')~CNbg~bold('  Gab:')~Cgab~bold('  Cod: ')~CCod,
-                   list(Cit=sprintf("%03d",it),
-                        Cbl=sprintf("%02d",bl),
-                        Cob=sprintf('%02d',ob),
-                        CIbg=sprintf("%03d",as.integer(itemblg)),
-                        CNbg=nomeblg,
-                        Cgab=gab,
-                        CCod=codigo)),
-        outer=T,line=-3,cex.main=1.5)
-  
-  formata <- function(valor,dig,dec=',') format(round(valor,digits=dig),ndigits=dig,nsmall=dig,dec=dec)
-  
-  title(substitute(bold("a=")~Cat~bold("  b=")~Cbt~bold("  c=")~Cct~
-                     italic("  Parametros originais (modo logistico):")~
-                     bold("  a=")~Ca~bold("  b=")~Cb~bold("  c=")~Cc,
-                   list(Cat= formata(par_at,2),
-                        Cbt= formata(par_bt,2),
-                        Cct= formata(par_c,2),
-                        Ca = formata(par_a*D,5),
-                        Cb = formata(par_b,5),
-                        Cc = formata(par_c,5))),
-        line=-4.8,font.main=1, cex.main=1.5,outer=T)
 }
 
 

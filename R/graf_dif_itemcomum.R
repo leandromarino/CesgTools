@@ -10,7 +10,7 @@ graf_dif_itemcomum <- function(blm_data, gabpar, itcom, modo,
                '\n','Analisando Grupo: ', x, '\n',
                "# =================================================================== !",
                '\n'))
-    GrafItemCom5(dirgrf = dirgrafico,
+    GrafItemCom(dirgrf = dirgrafico,
                  nomgrf = paste0('Comuns_', grp_calib, '_', x, '_', disc, '_', versao),
                  grupos = c(grp_calib, x),
                  
@@ -44,4 +44,4 @@ graf_dif_itemcomum <- function(blm_data, gabpar, itcom, modo,
 
 
   
-#Store(graf_dif_itemcomum, lib = Bni19Bolsa, lib.loc = dirBNI19Bolsa_R)
+#Store(graf_dif_itemcomum, lib = Bni22)

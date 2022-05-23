@@ -121,7 +121,7 @@ FILE='@arqtxt';
   
   cat('Escrevendo arquivo: ', arqtxt, '\n')
   
-  write.fwf(x = data[, c(col_id, 'lixo1', col_rsp, 'lixo2', col_peso)],
+  gdata::write.fwf(x = data[, c(col_id, 'lixo1', col_rsp, 'lixo2', col_peso)],
             file = paste0(dire, arqtxt), append = FALSE, quote = FALSE,
             sep = '', na = '', rownames = FALSE, colnames = FALSE,
             width = c(nid, 1, nitem, 1, 9))
